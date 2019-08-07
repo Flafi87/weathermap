@@ -45,7 +45,7 @@ class App extends React.Component {
           <Button
             className="my-3"
             color="primary"
-            href="https://github.com/Flafi87/RandomQuoteGenerator"
+            href="https://github.com/Flafi87/weathermap"
           >
       Repo
           </Button>
