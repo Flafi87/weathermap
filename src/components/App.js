@@ -6,7 +6,7 @@ import Mapa from './Map';
 class App extends React.Component {
   buttons = (
     <div className="d-flex justify-content-between">
-      <Button className="my-3" color="success" href="https://flafi.me/index.html#jscript">
+      <Button className="my-3" color="success" href="https://flafi.hu/index.html#jscript">
         Back to the website
       </Button>
       <Button
@@ -36,7 +36,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    Axios('https://flafi.me:2053/api/weather').then(
+    Axios('https://flafi.hu:2053/api/weather').then(
       weather => {
         this.setState({ weather: weather.data });
       },
@@ -44,7 +44,7 @@ class App extends React.Component {
         console.log(error);
       },
     );
-    Axios('https://flafi.me:2053/api/forecast').then(
+    Axios('https://flafi.hu:2053/api/forecast').then(
       forecast => {
         this.setState({ forecast: forecast.data });
         this.setState({ isLoaded: true });
