@@ -1,23 +1,17 @@
-import React from "react";
-import { Map, TileLayer } from "react-leaflet";
+import React from 'react';
+import { Map, TileLayer } from 'react-leaflet';
 import PropTypes from 'prop-types';
-import Markers from "./Markers";
-import MyModal from "./MyModal";
+import Markers from './Markers';
+import MyModal from './MyModal';
 
 class Mapa extends React.Component {
-
-  static propTypes = {
-    isLoaded:PropTypes.bool.isRequired,
-    weather:PropTypes.arrayOf(PropTypes.object).isRequired,
-    forecast:PropTypes.arrayOf(PropTypes.object).isRequired
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      chartData: [],
+    };
   }
-
-
-
-  state = {
-    showModal: false,
-    chartData: []
-  };
 
   chartCall = data => {
     this.setState({ chartData: data });
@@ -25,17 +19,16 @@ class Mapa extends React.Component {
 
   toggle = () => {
     this.setState(prevState => ({
-      showModal: !prevState.showModal
+      showModal: !prevState.showModal,
     }));
-  }
-
+  };
 
   render() {
-    const {isLoaded, weather, forecast} = this.props
-    const {showModal, chartData} = this.state
+    const { isLoaded, weather, forecast } = this.props;
+    const { showModal, chartData } = this.state;
     if (isLoaded) {
       return (
-        <div>
+        <div className="mapcontainer">
           <MyModal toggle={this.toggle} show={showModal} data={chartData} />
           <Map center={[50.3, 19.01]} zoom={8}>
             <TileLayer
@@ -51,14 +44,19 @@ class Mapa extends React.Component {
           </Map>
         </div>
       );
-    } 
-      return (
-        <div className="ui active dimmer">
-          <div className="ui text loader">Loading</div>
-        </div>
-      );
-    
+    }
+    return (
+      <div className="ui active dimmer">
+        <div className="ui text loader">Loading</div>
+      </div>
+    );
   }
 }
+
+Mapa.propTypes = {
+  isLoaded: PropTypes.bool.isRequired,
+  weather: PropTypes.arrayOf(PropTypes.object).isRequired,
+  forecast: PropTypes.arrayOf(PropTypes.object).isRequired,
+};
 
 export default Mapa;
