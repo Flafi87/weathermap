@@ -1,57 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Map, TileLayer } from 'react-leaflet';
 import PropTypes from 'prop-types';
 import Markers from './Markers';
 import MyModal from './MyModal';
 
-class Mapa extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showModal: false,
-      chartData: [],
-    };
-  }
+const Mapa = ({ isLoaded, weather, forecast }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [chartData, setchartData] = useState([]);
 
-  chartCall = data => {
-    this.setState({ chartData: data });
+  const chartCall = data => {
+    setchartData(data);
   };
 
-  toggle = () => {
-    this.setState(prevState => ({
-      showModal: !prevState.showModal,
-    }));
+  const toggle = () => {
+    setShowModal(showModal === false);
   };
 
-  render() {
-    const { isLoaded, weather, forecast } = this.props;
-    const { showModal, chartData } = this.state;
-    if (isLoaded) {
-      return (
-        <div className="mapcontainer">
-          <MyModal toggle={this.toggle} show={showModal} data={chartData} />
-          <Map center={[50.3, 19.01]} zoom={8}>
-            <TileLayer
-              url="https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZmxhZmk4NyIsImEiOiJjanBjemhmOHAwYW1lM2tvOGNvZmRseWV0In0.7Hq8AwC9BzLpfGzaDkGfzQ"
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            />
-            <Markers
-              showModal={this.toggle}
-              weather={weather}
-              forecast={forecast}
-              chartData={this.chartCall}
-            />
-          </Map>
-        </div>
-      );
-    }
+  if (isLoaded) {
+    const MyMarkers = (
+      <Markers showModal={toggle} weather={weather} forecast={forecast} chartData={chartCall} />
+    );
+    const MyMyModal = <MyModal toggle={toggle} show={showModal} data={chartData} />;
     return (
-      <div className="ui active dimmer">
-        <div className="ui text loader">Loading</div>
+      <div className="mapcontainer">
+        {MyMyModal}
+        <Map center={[50.3, 19.01]} zoom={8}>
+          <TileLayer
+            url="https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZmxhZmk4NyIsImEiOiJjanBjemhmOHAwYW1lM2tvOGNvZmRseWV0In0.7Hq8AwC9BzLpfGzaDkGfzQ"
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          />
+          {MyMarkers}
+        </Map>
       </div>
     );
   }
-}
+  return (
+    <div className="ui active dimmer">
+      <div className="ui text loader">Loading</div>
+    </div>
+  );
+};
 
 Mapa.propTypes = {
   isLoaded: PropTypes.bool.isRequired,
