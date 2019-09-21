@@ -1,18 +1,14 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
-import { Card, Button } from 'reactstrap';
+import { Button } from 'reactstrap';
 import PropTypes from 'prop-types';
 
-class Markers extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { myMarker: [] };
-  }
+const Markers = ({ weather, showModal, chartData, forecast }) => {
+  const [myMarkers, setMyMarkers] = useState([]);
 
-  componentDidMount() {
-    const { weather, showModal, chartData, forecast } = this.props;
+  useEffect(() => {
     const myMarker = weather.map((marker, index) => {
       const temp = marker.main.temp.toFixed(1);
       const date = new Date(marker.dt * 1000);
@@ -59,14 +55,11 @@ class Markers extends React.Component {
         </Marker>
       );
     });
-    this.setState({ myMarker });
-  }
+    setMyMarkers(myMarker);
+  }, []);
 
-  render() {
-    const { myMarker } = this.state;
-    return <div>{myMarker}</div>;
-  }
-}
+  return <div>{myMarkers}</div>;
+};
 
 Markers.propTypes = {
   weather: PropTypes.arrayOf(PropTypes.object).isRequired,

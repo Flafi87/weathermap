@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Axios from 'axios';
 import { Button, Spinner } from 'reactstrap';
 import Mapa from './Map';
 
-class App extends React.Component {
-  buttons = (
+const App = () => {
+  const buttons = (
     <div className="d-flex justify-content-between">
       <Button className="my-3" color="success" href="https://flafi.hu/index.html#jscript">
         Back to the website
@@ -20,53 +20,33 @@ class App extends React.Component {
     </div>
   );
 
-  spinner = (
+  const spinner = (
     <div className="d-flex justify-content-center align-middle">
       <Spinner color="primary" />
     </div>
   );
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      weather: [],
-      forecast: [],
-      isLoaded: false,
-    };
-  }
+  const [weather, setWeather] = useState([]);
+  const [forecast, setForecast] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  componentDidMount() {
-    Axios('https://flafi.hu:2053/api/weather').then(
-      weather => {
-        this.setState({ weather: weather.data });
-      },
-      error => {
-        console.log(error);
-      },
-    );
-    Axios('https://flafi.hu:2053/api/forecast').then(
-      forecast => {
-        this.setState({ forecast: forecast.data });
-        this.setState({ isLoaded: true });
-      },
-      error => {
-        console.log(error);
-      },
-    );
-  }
+  const fetchData = async () => {
+    const weatherData = await Axios('https://flafi.hu:2053/api/weather');
+    setWeather(weatherData.data);
+    const forecastData = await Axios('https://flafi.hu:2053/api/forecast');
+    setForecast(forecastData.data);
+    setIsLoaded(true);
+  };
 
-  render() {
-    const { weather, forecast, isLoaded } = this.state;
-    return (
-      <div className="container">
-        {this.buttons}
-        {isLoaded ? (
-          <Mapa weather={weather} forecast={forecast} isLoaded={isLoaded} />
-        ) : (
-          this.spinner
-        )}
-      </div>
-    );
-  }
-}
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  return (
+    <div className="container">
+      {buttons}
+      {isLoaded ? <Mapa weather={weather} forecast={forecast} isLoaded={isLoaded} /> : spinner}
+    </div>
+  );
+};
 export default App;
