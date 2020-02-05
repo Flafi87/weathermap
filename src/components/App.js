@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Axios from 'axios';
 import { Button, Spinner } from 'reactstrap';
 import Mapa from './Map';
 
@@ -31,11 +30,17 @@ const App = () => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const fetchData = async () => {
-    const weatherData = await Axios('https://flafi.hu:2053/api/weather');
-    setWeather(weatherData.data);
-    const forecastData = await Axios('https://flafi.hu:2053/api/forecast');
-    setForecast(forecastData.data);
-    setIsLoaded(true);
+    fetch('https://flafi.hu:2053/api/weather')
+      .then(response => response.json())
+      .then(weatherData => setWeather(weatherData))
+      .then(() => {
+        fetch('https://flafi.hu:2053/api/forecast')
+          .then(response => response.json())
+          .then(forecastData => {
+            setForecast(forecastData);
+            setIsLoaded(true);
+          });
+      });
   };
 
   useEffect(() => {
