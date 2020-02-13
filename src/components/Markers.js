@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from 'reactstrap';
@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 const Markers = ({ weather, showModal, chartData, forecast }) => {
   const [myMarkers, setMyMarkers] = useState([]);
 
-  useEffect(() => {
+  const marking = useCallback(() => {
     const myMarker = weather.map((marker, index) => {
       const temp = marker.main.temp.toFixed(1);
       const date = new Date(marker.dt * 1000);
@@ -56,6 +56,10 @@ const Markers = ({ weather, showModal, chartData, forecast }) => {
       );
     });
     setMyMarkers(myMarker);
+  }, [weather, showModal, chartData, forecast, myMarkers]);
+
+  useEffect(() => {
+    marking();
   }, []);
 
   return <div>{myMarkers}</div>;
