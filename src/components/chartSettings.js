@@ -50,6 +50,7 @@ const chartSettings = {
   ],
   legend: {
     offsetY: -10,
+    show: false,
   },
   responsive: [
     {
@@ -59,9 +60,6 @@ const chartSettings = {
           bar: {
             horizontal: false,
           },
-        },
-        legend: {
-          show: false,
         },
       },
     },
