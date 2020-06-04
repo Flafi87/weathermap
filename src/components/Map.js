@@ -8,7 +8,7 @@ const Mapa = ({ weather, forecast }) => {
   const [showModal, setShowModal] = useState(false);
   const [chartData, setchartData] = useState([]);
 
-  const chartCall = data => {
+  const chartCall = (data) => {
     setchartData(data);
   };
 
@@ -23,9 +23,9 @@ const Mapa = ({ weather, forecast }) => {
   return (
     <div className="mapcontainer">
       {MyMyModal}
-      <Map center={[50.3, 19.01]} zoom={8}>
+      <Map center={[50.3, 19.01]} zoom={6}>
         <TileLayer
-          url="https://api.tiles.mapbox.com/v4/mapbox.dark/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZmxhZmk4NyIsImEiOiJjanBjemhmOHAwYW1lM2tvOGNvZmRseWV0In0.7Hq8AwC9BzLpfGzaDkGfzQ"
+          url="https://api.mapbox.com/styles/v1/flafi87/ckb0vl6pb156t1ilimhno1cpt/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmxhZmk4NyIsImEiOiJjanpzYjlhYWEwcGJiM2NwbzQwd3FqaXkwIn0.5CeZemKLYgK4JI4AHSM3lA"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
         {MyMarkers}
